@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpeedGamz — Gamer Tools Hub</title>
+<meta name="description" content="SpeedGamz: gaming tools, calculators, Minecraft utilities and everyday gamer tools.">
+<style>
+:root{
+  --bg:#071018;--panel:#0e1822;--panel2:#142230;--line:#263746;
+  --text:#f5f8fb;--muted:#9fb0bf;--accent:#4da3ff;--good:#44d483;--warn:#ffbd59;--bad:#ff6675;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.top{
+  position:sticky;top:0;z-index:50;height:68px;
+  display:flex;align-items:center;gap:14px;padding:0 18px;
+  background:#071018ee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px}
+.logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#2f8cff,#4dd5ff)}
+.menu{display:none;width:40px;height:40px;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:#fff}
+.wrap{display:flex;min-height:calc(100vh - 68px)}
+.side{
+  width:235px;flex:0 0 235px;position:sticky;top:68px;height:calc(100vh - 68px);
+  overflow:auto;padding:13px 11px;background:#09121aeF;border-right:1px solid var(--line)
+}
+.navTitle{font-size:11px;color:#687d8d;text-transform:uppercase;letter-spacing:1.2px;padding:12px 11px 6px}
+.nav{width:100%;text-align:left;padding:11px;border-radius:9px;border:1px solid transparent;background:transparent;color:#bfd0dd;font-weight:700;margin-bottom:4px}
+.nav:hover{background:#13202b;color:#fff}
+.nav.active{background:#102b42;border-color:#1f4e73;color:#fff}
+.main{width:100%;max-width:1450px;margin:auto;padding:24px}
+.page{display:none}.page.active{display:block}
+.hero{
+  padding:28px;border-radius:20px;border:1px solid #2a5272;
+  background:radial-gradient(circle at 85% 15%,#19456e66,transparent 28%),linear-gradient(135deg,#0d2334,#0e1822);
+}
+.hero h1{margin:0 0 10px;font-size:clamp(34px,5vw,58px)}
+.hero p{color:#c1d0db;max-width:850px;line-height:1.65}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:16px}
+.card{padding:17px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#142230,#0f1821);color:#fff;text-align:left}
+.card:hover{border-color:#4da3ff88}
+.card h3{margin:0 0 7px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.stat{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.stat b{font-size:23px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+.head h2{margin:0;font-size:29px}.head p{margin:4px 0 0;color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:17px;margin-bottom:14px}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{color:#b7c6d2;font-size:12px;font-weight:700}
+.field input,.field select,.field textarea{width:100%;padding:10px;border-radius:9px;border:1px solid var(--line);background:#09121a;color:#fff;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#4da3ffaa;box-shadow:0 0 0 3px #4da3ff14}
+.field textarea{min-height:120px;resize:vertical}
+.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.btn{padding:10px 13px;border-radius:9px;border:1px solid var(--line);background:var(--panel2);color:#fff;font-weight:800}
+.btn.primary{background:linear-gradient(135deg,#2f8cff,#35c9ff);border:0}
+.btn.good{background:#123b29;border-color:#216542}.btn.warn{background:#3f2e14;border-color:#6d4f1f}.btn.bad{background:#3b171d;border-color:#6a2a34}
+.result{margin-top:13px;padding:14px;border:1px solid #223140;border-radius:10px;background:#060c11;min-height:80px}
+.big{font-size:28px;font-weight:900}.muted{color:var(--muted);font-size:13px;line-height:1.55}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{padding:9px;border-bottom:1px solid #202e3b;text-align:left;font-size:13px}
+th{color:#b9c9d5;background:#0c151e}
+.small{font-size:12px;color:var(--muted)}
+.note{padding:11px;border-radius:10px;background:#13202a;border:1px solid #243947;color:#aec0cd;font-size:12px;line-height:1.5}
+.footer{text-align:center;color:#6e808e;font-size:12px;padding:28px 0 8px}
+.toast{position:fixed;right:16px;bottom:16px;z-index:999;padding:11px 14px;border-radius:10px;background:#14202a;border:1px solid var(--accent);opacity:0;transform:translateY(20px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){
+  .menu{display:block}.side{position:fixed;left:-250px;z-index:80;transition:.2s}.side.open{left:0}
+  .main{padding:17px}.form{grid-template-columns:1fr}.full{grid-column:auto}
+}
+@media(max-width:600px){.grid,.stats{grid-template-columns:1fr}.hero{padding:21px}.brand{font-size:17px}}
+
+/* --- SpeedGamz responsive upgrade --- */
+html { scroll-behavior:smooth; }
+body { overflow-x:hidden; }
+button, input, select, textarea { min-height:44px; }
+button { -webkit-tap-highlight-color:transparent; }
+.tableWrap { -webkit-overflow-scrolling:touch; }
+@media (min-width:1400px){
+  .main{padding:30px 34px}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (min-width:781px) and (max-width:1100px){
+  .side{width:210px;flex-basis:210px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:780px){
+  .top{height:64px;padding:0 12px}
+  .wrap{min-height:calc(100vh - 64px)}
+  .side{
+    top:64px;height:calc(100vh - 64px);width:270px;flex-basis:270px;
+    box-shadow:12px 0 35px rgba(0,0,0,.35);
+  }
+  .main{padding:14px;width:100%;min-width:0}
+  .hero{padding:20px}
+  .hero h1{font-size:clamp(30px,9vw,44px);line-height:1.05}
+  .hero p{font-size:15px}
+  .row{width:100%}
+  .row .btn{flex:1 1 auto}
+  .form{grid-template-columns:1fr;gap:10px}
+  .full{grid-column:auto}
+  .grid,.stats{grid-template-columns:1fr}
+  .head h2{font-size:24px}
+  .panel{padding:13px}
+  .tableWrap table{min-width:620px}
+  .brand{font-size:16px}
+  .logo{width:36px;height:36px}
+}
+@media (max-width:430px){
+  .top{gap:8px}
+  .menu{width:42px;height:42px}
+  .main{padding:10px}
+  .hero{padding:17px;border-radius:15px}
+  .hero h1{font-size:31px}
+  .stats{gap:8px}
+  .stat{padding:12px}
+  .stat b{font-size:20px}
+  .btn{width:100%;padding:11px 12px}
+  .row{gap:8px}
+  .row .btn{flex:1 1 100%}
+  .field input,.field select,.field textarea{font-size:16px}
+  .result,.output{overflow-wrap:anywhere;word-break:break-word}
+}
+
+</style>
+</head>
+<body>
+
+<header class="top">
+<button class="menu" id="menuBtn">☰</button>
+<a class="brand" href="#" onclick="show('home');return false;"><span class="logo">🧮</span><span>SPEEDGAMZ</span></a>
+</header>
+
+<div class="wrap">
+<aside class="side" id="side">
+<div class="navTitle">Main</div>
+<button class="nav active" data-page="home">🏠 Home</button>
+<button class="nav" data-page="calculators">🧮 Calculators</button>
+
+<div class="navTitle">Money</div>
+<button class="nav" data-page="invoice">🧾 Invoice</button>
+<button class="nav" data-page="tax">💷 Tax / VAT</button>
+<button class="nav" data-page="discount">🏷️ Discount</button>
+<button class="nav" data-page="markup">📈 Markup & Margin</button>
+<button class="nav" data-page="tip">💰 Tip / Split</button>
+
+<div class="navTitle">Everyday</div>
+<button class="nav" data-page="percent">%</button>
+<button class="nav" data-page="date">📅 Date</button>
+<button class="nav" data-page="time">⏱️ Time</button>
+<button class="nav" data-page="convert">🔄 Convert</button>
+<button class="nav" data-page="loan">🏦 Loan</button>
+
+<div class="navTitle">Work</div>
+<button class="nav" data-page="pay">💼 Pay / Hours</button>
+<button class="nav" data-page="breakEven">⚖️ Break-even</button>
+<button class="nav" data-page="vatSplit">🧾 VAT Split</button>
+<button class="nav" data-page="text">📝 Text Tools</button>
+<button class="nav" data-page="settings">⚙️ Settings</button>
+</aside>
+
+<main class="main">
+
+<section class="page active" id="home">
+<div class="hero">
+<h1>Everything useful for work, in one place.</h1>
+<p>Invoices, VAT estimates, percentages, pay calculations, loans, conversions, dates, break-even analysis and more. No account or server required.</p>
+<div class="row">
+<button class="btn primary" onclick="show('calculators')">Open calculators</button>
+<button class="btn" onclick="show('invoice')">Make invoice</button>
+<button class="btn" onclick="show('tax')">VAT / tax</button>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>15+</b><span>Work tools</span></div>
+<div class="stat"><b>£ / $ / €</b><span>Currency-friendly</span></div>
+<div class="stat"><b>100%</b><span>Runs in browser</span></div>
+<div class="stat"><b>PDF-ready</b><span>Print invoices</span></div>
+</div>
+<div class="grid">
+<div class="card" onclick="show('invoice')"><h3>🧾 Invoice</h3><p>Build line items, subtotal, VAT and total, then print/save as PDF from your browser.</p></div>
+<div class="card" onclick="show('tax')"><h3>💷 VAT / Tax</h3><p>Estimate VAT-inclusive/exclusive amounts and simple tax scenarios.</p></div>
+<div class="card" onclick="show('pay')"><h3>💼 Pay Calculator</h3><p>Hours, overtime and gross pay calculations.</p></div>
+<div class="card" onclick="show('loan')"><h3>🏦 Loan</h3><p>Monthly payment and total repayment estimates.</p></div>
+<div class="card" onclick="show('breakEven')"><h3>⚖️ Break-even</h3><p>Find how many units you need to sell to cover costs.</p></div>
+<div class="card" onclick="show('convert')"><h3>🔄 Convert</h3><p>Length, weight, temperature, data and time conversions.</p></div>
+</div>
+</section>
+
+<section class="page" id="calculators">
+<div class="head"><div><h2>🧮 Calculators</h2><p>Choose a work or everyday tool.</p></div></div>
+<div class="grid">
+<button class="card" onclick="show('percent')"><h3>% Percentage</h3><p>Percent of, increase, decrease and difference.</p></button>
+<button class="card" onclick="show('invoice')"><h3>🧾 Invoice</h3><p>Line items, VAT and totals.</p></button>
+<button class="card" onclick="show('tax')"><h3>💷 VAT / Tax</h3><p>Tax/VAT estimates.</p></button>
+<button class="card" onclick="show('discount')"><h3>🏷️ Discount</h3><p>Sale price and savings.</p></button>
+<button class="card" onclick="show('markup')"><h3>📈 Margin</h3><p>Markup and margin.</p></button>
+<button class="card" onclick="show('tip')"><h3>💰 Tip / Split</h3><p>Tip and bill splitting.</p></button>
+<button class="card" onclick="show('loan')"><h3>🏦 Loan</h3><p>Payment estimator.</p></button>
+<button class="card" onclick="show('pay')"><h3>💼 Pay</h3><p>Hours and overtime.</p></button>
+<button class="card" onclick="show('breakEven')"><h3>⚖️ Break-even</h3><p>Units and revenue needed.</p></button>
+</div>
+</section>
+
+<section class="page" id="percent">
+<div class="head"><div><h2>% Percentage Calculator</h2><p>Four common percentage calculations.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>What is X% of Y?</label><input id="px" type="number" value="15"><input id="py" type="number" value="200"></div>
+<div class="field"><label>X is what % of Y?</label><input id="pax" type="number" value="30"><input id="pay" type="number" value="200"></div>
+<div class="field"><label>Increase Y by X%</label><input id="ix" type="number" value="20"><input id="iy" type="number" value="100"></div>
+<div class="field"><label>Decrease Y by X%</label><input id="dx" type="number" value="20"><input id="dy" type="number" value="100"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genPercent()">Calculate</button></div></div>
+<pre class="output" id="percentOut"></pre>
+</section>
+
+<section class="page" id="discount">
+<div class="head"><div><h2>🏷️ Discount Calculator</h2><p>Find sale price and savings.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Original price</label><input id="discPrice" type="number" value="100" step="0.01"></div>
+<div class="field"><label>Discount %</label><input id="discPct" type="number" value="20" step="0.01"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genDiscount()">Calculate</button></div></div>
+<pre class="output" id="discountOut"></pre>
+</section>
+
+<section class="page" id="markup">
+<div class="head"><div><h2>📈 Markup & Margin</h2><p>Compare cost, selling price, markup and gross margin.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Cost</label><input id="mmCost" type="number" value="50" step="0.01"></div>
+<div class="field"><label>Selling price</label><input id="mmSell" type="number" value="80" step="0.01"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genMarkup()">Calculate</button></div></div>
+<pre class="output" id="markupOut"></pre>
+</section>
+
+<section class="page" id="tip">
+<div class="head"><div><h2>💰 Tip / Split Calculator</h2><p>Split a bill with a percentage tip.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Bill</label><input id="tipBill" type="number" value="80" step="0.01"></div>
+<div class="field"><label>Tip %</label><input id="tipPct" type="number" value="10" step="0.01"></div>
+<div class="field"><label>People</label><input id="tipPeople" type="number" min="1" value="4"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genTip()">Calculate</button></div></div>
+<pre class="output" id="tipOut"></pre>
+</section>
+
+<section class="page" id="tax">
+<div class="head"><div><h2>💷 VAT / Tax Calculator</h2><p>Use this as an estimate. Tax rules and rates depend on country, date and circumstances.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Amount</label><input id="taxAmount" type="number" value="100" step="0.01"></div>
+<div class="field"><label>Rate %</label><input id="taxRate" type="number" value="20" step="0.01"></div>
+<div class="field"><label>Mode</label><select id="taxMode"><option value="add">Add rate to net amount</option><option value="remove">Extract rate from gross amount</option></select></div>
+<div class="field"><label>Currency symbol</label><input id="taxCurrency" value="£"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genTax()">Calculate</button></div></div>
+<pre class="output" id="taxOut"></pre>
+<div class="note">This calculator is for estimates, not professional tax advice. For an actual tax return or filing, use the rules published by your tax authority or a qualified professional.</div>
+</section>
+
+<section class="page" id="vatSplit">
+<div class="head"><div><h2>🧾 VAT Split</h2><p>Quick net / VAT / gross breakdown.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Gross or net amount</label><input id="vatAmount" type="number" value="120" step="0.01"></div>
+<div class="field"><label>VAT %</label><input id="vatRate" type="number" value="20" step="0.01"></div>
+<div class="field"><label>Input is</label><select id="vatMode"><option value="gross">Gross (VAT included)</option><option value="net">Net (VAT not included)</option></select></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genVatSplit()">Calculate</button></div></div>
+<pre class="output" id="vatOut"></pre>
+</section>
+
+<section class="page" id="invoice">
+<div class="head">
+<div><h2>🧾 Invoice Builder</h2><p>Create a simple printable invoice in your browser.</p></div>
+</div>
+<div class="panel">
+<div class="form">
+<div class="field"><label>Your business</label><input id="invFrom" value="Fire Hub Business"></div>
+<div class="field"><label>Invoice number</label><input id="invNo" value="INV-001"></div>
+<div class="field"><label>Customer</label><input id="invTo" value="Customer"></div>
+<div class="field"><label>Date</label><input id="invDate" type="date"></div>
+<div class="field"><label>VAT %</label><input id="invVat" type="number" value="20" step="0.01"></div>
+<div class="field"><label>Currency</label><input id="invCur" value="£"></div>
+</div>
+</div>
+
+<div class="panel">
+<div class="row" style="justify-content:space-between">
+<strong>Line items</strong>
+<div class="row"><button class="btn small" onclick="addInvoiceRow()">＋ Add item</button><button class="btn small" onclick="resetInvoice()">Reset</button></div>
+</div>
+<div class="tableWrap" style="margin-top:12px">
+<table><thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Total</th><th></th></tr></thead><tbody id="invRows"></tbody></table>
+</div>
+<div class="row" style="margin-top:14px">
+<button class="btn primary" onclick="generateInvoice()">Generate Invoice</button>
+<button class="btn good" onclick="printInvoice()">Print / Save PDF</button>
+</div>
+</div>
+<div class="panel"><div id="invoicePreview" class="result"></div></div>
+</section>
+
+<section class="page" id="loan">
+<div class="head"><div><h2>🏦 Loan Calculator</h2><p>Estimate monthly payments using a standard amortising loan formula.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Loan amount</label><input id="loanPrincipal" type="number" value="10000" step="0.01"></div>
+<div class="field"><label>Annual interest %</label><input id="loanRate" type="number" value="6" step="0.01"></div>
+<div class="field"><label>Term (years)</label><input id="loanYears" type="number" value="5" step="0.1"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genLoan()">Calculate</button></div></div>
+<pre class="output" id="loanOut"></pre>
+</section>
+
+<section class="page" id="pay">
+<div class="head"><div><h2>💼 Pay / Hours Calculator</h2><p>Gross pay estimate including overtime.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Hourly rate</label><input id="payRate" type="number" value="15" step="0.01"></div>
+<div class="field"><label>Regular hours</label><input id="payHours" type="number" value="40" step="0.25"></div>
+<div class="field"><label>Overtime hours</label><input id="payOT" type="number" value="5" step="0.25"></div>
+<div class="field"><label>Overtime multiplier</label><input id="payMult" type="number" value="1.5" step="0.1"></div>
+<div class="field"><label>Shifts / weeks in period</label><input id="payPeriods" type="number" value="1"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genPay()">Calculate</button></div></div><pre class="output" id="payOut"></pre>
+</section>
+
+<section class="page" id="breakEven">
+<div class="head"><div><h2>⚖️ Break-even Calculator</h2><p>Find units and revenue required to cover fixed costs.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Fixed costs</label><input id="beFixed" type="number" value="5000" step="0.01"></div>
+<div class="field"><label>Price per unit</label><input id="bePrice" type="number" value="50" step="0.01"></div>
+<div class="field"><label>Variable cost per unit</label><input id="beVar" type="number" value="20" step="0.01"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genBreakEven()">Calculate</button></div></div><pre class="output" id="beOut"></pre>
+</section>
+
+<section class="page" id="date">
+<div class="head"><div><h2>📅 Date Calculator</h2><p>Add or subtract days from a date and find date differences.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Start date</label><input id="dateStart" type="date"></div>
+<div class="field"><label>Days to add / subtract</label><input id="dateDays" type="number" value="30"></div>
+<div class="field"><label>Second date (for difference)</label><input id="dateSecond" type="date"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genDate()">Calculate</button></div></div><pre class="output" id="dateOut"></pre>
+</section>
+
+<section class="page" id="time">
+<div class="head"><div><h2>⏱️ Time Calculator</h2><p>Add hours/minutes or calculate elapsed time.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Start time</label><input id="timeStart" type="time" value="09:00"></div>
+<div class="field"><label>End time</label><input id="timeEnd" type="time" value="17:30"></div>
+<div class="field"><label>Break minutes</label><input id="timeBreak" type="number" value="30"></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genTime()">Calculate</button></div></div><pre class="output" id="timeOut"></pre>
+</section>
+
+<section class="page" id="convert">
+<div class="head"><div><h2>🔄 Unit Converter</h2><p>Length, weight, temperature, data and time.</p></div></div>
+<div class="panel"><div class="form">
+<div class="field"><label>Category</label><select id="convCat"><option>Length</option><option>Weight</option><option>Temperature</option><option>Data</option><option>Time</option></select></div>
+<div class="field"><label>Value</label><input id="convValue" type="number" value="1"></div>
+<div class="field"><label>From</label><select id="convFrom"></select></div>
+<div class="field"><label>To</label><select id="convTo"></select></div>
+</div><div class="row" style="margin-top:14px"><button class="btn primary" onclick="genConvert()">Convert</button></div></div><pre class="output" id="convOut"></pre>
+</section>
+
+<section class="page" id="text">
+<div class="head"><div><h2>📝 Text Tools</h2><p>Character count, word count and line count.</p></div></div>
+<div class="panel">
+<textarea id="textInput" placeholder="Type or paste text here..."></textarea>
+<div class="row" style="margin-top:12px">
+<button class="btn primary" onclick="genText()">Analyze</button>
+<button class="btn" onclick="$('textInput').value='';genText()">Clear</button>
+</div>
+</div>
+<pre class="output" id="textOut"></pre>
+</section>
+
+<section class="page" id="settings">
+<div class="head"><div><h2>⚙️ Settings</h2><p>Small preferences for this browser.</p></div></div>
+<div class="panel">
+<div class="form">
+<div class="field"><label>Default currency symbol</label><input id="setCurrency" value="£"></div>
+<div class="field"><label>Default VAT rate %</label><input id="setVat" type="number" value="20"></div>
+</div>
+<div class="row" style="margin-top:14px"><button class="btn primary" onclick="saveSettings()">Save settings</button><button class="btn" onclick="resetSettings()">Reset</button></div>
+<p class="muted">Settings are stored only in this browser using local storage.</p>
+</div>
+</section>
+
+<footer class="footer">SpeedGamz • Gamer Tools Hub</footer>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function num(id,def=0){const v=parseFloat($(id).value);return Number.isFinite(v)?v:def}
+function money(v,sym='£'){return sym+Number(v).toFixed(2)}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),1700)}
+function show(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+ $(id).classList.add('active');
+ const b=document.querySelector('.nav[data-page="'+id+'"]');if(b)b.classList.add('active');
+ $('side').classList.remove('open');scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));
+$('menuBtn').onclick=()=>$('side').classList.toggle('open');
+
+function genPercent(){
+ const out=[];
+ out.push((num('px')*num('py')/100).toFixed(2)+' = '+num('px')+'% of '+num('py'));
+ out.push(num('pay')===0?'Cannot divide by zero.':(num('pax')/num('pay')*100).toFixed(2)+'%');
+ out.push((num('iy')*(1+num('ix')/100)).toFixed(2)+' after a '+num('ix')+'% increase');
+ out.push((num('dy')*(1-num('dx')/100)).toFixed(2)+' after a '+num('dx')+'% decrease');
+ $('percentOut').textContent=out.join('\n');
+}
+function genDiscount(){
+ const p=num('discPrice'),d=num('discPct'),save=p*d/100; $('discountOut').textContent='Savings: '+money(save)+'\nSale price: '+money(p-save);
+}
+function genMarkup(){
+ const c=num('mmCost'),s=num('mmSell'); if(c===0){$('markupOut').textContent='Cost cannot be 0.';return}
+ const profit=s-c,markup=profit/c*100,margin=s===0?0:profit/s*100;
+ $('markupOut').textContent='Profit: '+profit.toFixed(2)+'\nMarkup: '+markup.toFixed(2)+'%\nGross margin: '+margin.toFixed(2)+'%';
+}
+function genTip(){
+ const bill=num('tipBill'),pct=num('tipPct'),people=Math.max(1,Math.floor(num('tipPeople',1)));
+ const tip=bill*pct/100,total=bill+tip;
+ $('tipOut').textContent='Tip: '+money(tip)+'\nTotal: '+money(total)+'\nPer person: '+money(total/people);
+}
+function genTax(){
+ const a=num('taxAmount'),r=num('taxRate'),sym=$('taxCurrency').value||'£';
+ if($('taxMode').value==='add'){
+   const tax=a*r/100; $('taxOut').textContent='Net: '+money(a,sym)+'\nTax/VAT: '+money(tax,sym)+'\nGross: '+money(a+tax,sym);
+ }else{
+   const net=a/(1+r/100),tax=a-net; $('taxOut').textContent='Gross: '+money(a,sym)+'\nNet: '+money(net,sym)+'\nTax/VAT: '+money(tax,sym);
+ }
+}
+function genVatSplit(){
+ const a=num('vatAmount'),r=num('vatRate'),sym=$('setCurrency').value||'£';
+ if($('vatMode').value==='net'){const v=a*r/100;$('vatOut').textContent='Net: '+money(a,sym)+'\nVAT: '+money(v,sym)+'\nGross: '+money(a+v,sym)}
+ else {const net=a/(1+r/100),v=a-net;$('vatOut').textContent='Gross: '+money(a,sym)+'\nNet: '+money(net,sym)+'\nVAT: '+money(v,sym)}
+}
+function genLoan(){
+ const P=num('loanPrincipal'),annual=num('loanRate'),years=num('loanYears'),n=years*12,r=annual/100/12;
+ if(n<=0||P<0){$('loanOut').textContent='Enter valid values.';return}
+ const m=r===0?P/n:P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1),total=m*n,interest=total-P;
+ $('loanOut').textContent='Monthly payment: '+money(m)+'\nTotal repayment: '+money(total)+'\nTotal interest: '+money(interest);
+}
+function genPay(){
+ const rate=num('payRate'),hrs=num('payHours'),ot=num('payOT'),mult=num('payMult'),periods=Math.max(1,num('payPeriods',1));
+ const regular=rate*hrs,over=rate*mult*ot,total=(regular+over)*periods;
+ $('payOut').textContent='Regular pay: '+money(regular)+'\nOvertime pay: '+money(over)+'\nTotal for period: '+money(total);
+}
+function genBreakEven(){
+ const fixed=num('beFixed'),price=num('bePrice'),variable=num('beVar'),con=price-variable;
+ if(con<=0){$('beOut').textContent='Price per unit must be greater than variable cost.';return}
+ const units=fixed/con; $('beOut').textContent='Break-even units: '+units.toFixed(2)+'\nWhole units required: '+Math.ceil(units)+'\nBreak-even revenue: '+money(Math.ceil(units)*price);
+}
+function genDate(){
+ const a=new Date($('dateStart').value+'T00:00:00'),days=num('dateDays'),b=new Date(a);b.setDate(b.getDate()+days);
+ const second=$('dateSecond').value?new Date($('dateSecond').value+'T00:00:00'):null;
+ let text='Result date: '+b.toLocaleDateString();
+ if(second)text+='\nDifference: '+Math.abs(Math.round((second-a)/86400000))+' days';
+ $('dateOut').textContent=text;
+}
+function genTime(){
+ const s=$('timeStart').value.split(':').map(Number),e=$('timeEnd').value.split(':').map(Number),br=Math.max(0,num('timeBreak'));
+ let start=s[0]*60+s[1],end=e[0]*60+e[1];if(end<start)end+=1440;
+ const mins=end-start-br; $('timeOut').textContent='Elapsed after break: '+Math.floor(Math.max(0,mins)/60)+'h '+(Math.max(0,mins)%60)+'m';
+}
+const units={
+Length:{m:1,km:1000,cm:.01,mm:.001,in:0.0254,ft:.3048,yd:.9144,mi:1609.344},
+Weight:{kg:1,g:.001,mg:0.000001,lb:.45359237,oz:.028349523125},
+Data:{B:1,KB:1024,MB:1024**2,GB:1024**3,TB:1024**4},
+Time:{s:1,min:60,h:3600,day:86400}
+};
+function refreshConversions(){
+ const cat=$('convCat').value, from=$('convFrom'),to=$('convTo');from.innerHTML='';to.innerHTML='';
+ if(cat==='Temperature'){['C','F','K'].forEach(x=>{from.add(new Option(x,x));to.add(new Option(x,x))});return}
+ Object.keys(units[cat]).forEach(x=>{from.add(new Option(x,x));to.add(new Option(x,x))});
+}
+$('convCat').addEventListener('change',refreshConversions);
+function temp(v,f,t){let c=f==='C'?v:f==='F'?(v-32)*5/9:v-273.15;return t==='C'?c:t==='F'?c*9/5+32:c+273.15}
+function genConvert(){
+ const cat=$('convCat').value,v=num('convValue'),f=$('convFrom').value,t=$('convTo').value;
+ const ans=cat==='Temperature'?temp(v,f,t):v*units[cat][f]/units[cat][t];
+ $('convOut').textContent=v+' '+f+' = '+ans+' '+t;
+}
+function genText(){
+ const s=$('textInput').value;const words=s.trim()?s.trim().split(/\s+/).length:0,lines=s? s.split(/\r?\n/).length:0;
+ $('textOut').textContent='Characters: '+s.length+'\nCharacters (no spaces): '+s.replace(/\s/g,'').length+'\nWords: '+words+'\nLines: '+lines;
+}
+
+/* Invoice */
+let invoiceItems=[
+ {desc:'Service',qty:1,price:100},
+ {desc:'Extra work',qty:2,price:25}
+];
+function renderInvoiceRows(){
+ const tb=$('invRows');tb.innerHTML='';
+ invoiceItems.forEach((x,i)=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td><input value="'+escapeAttr(x.desc)+'"></td><td><input type="number" min="0" step="0.01" value="'+x.qty+'"></td><td><input type="number" min="0" step="0.01" value="'+x.price+'"></td><td>'+money(x.qty*x.price,$('invCur').value||'£')+'</td><td><button class="btn small bad">×</button></td>';
+  const inputs=tr.querySelectorAll('input');
+  inputs[0].oninput=e=>x.desc=e.target.value;
+  inputs[1].oninput=e=>x.qty=+e.target.value||0;
+  inputs[2].oninput=e=>x.price=+e.target.value||0;
+  tr.querySelector('button').onclick=()=>{if(invoiceItems.length>1){invoiceItems.splice(i,1);renderInvoiceRows()}};
+  tb.appendChild(tr);
+ });
+}
+function addInvoiceRow(){invoiceItems.push({desc:'New item',qty:1,price:0});renderInvoiceRows()}
+function resetInvoice(){invoiceItems=[{desc:'Service',qty:1,price:100}];renderInvoiceRows();generateInvoice()}
+function generateInvoice(){
+ const cur=$('invCur').value||'£',vat=+$('invVat').value||0,sub=invoiceItems.reduce((a,x)=>a+x.qty*x.price,0),tax=sub*vat/100,total=sub+tax;
+ const date=$('invDate').value||new Date().toLocaleDateString();
+ let rows=invoiceItems.map(x=>'<tr><td>'+escapeHtml(x.desc)+'</td><td>'+x.qty+'</td><td>'+money(x.price,cur)+'</td><td>'+money(x.qty*x.price,cur)+'</td></tr>').join('');
+ $('invoicePreview').innerHTML='<div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap"><div><h2 style="margin:0">'+escapeHtml($('invFrom').value)+'</h2><div class="muted">Bill to: '+escapeHtml($('invTo').value)+'</div></div><div><strong>'+escapeHtml($('invNo').value)+'</strong><div class="muted">'+date+'</div></div></div><div class="tableWrap" style="margin-top:15px"><table><thead><tr><th>Description</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>'+rows+'</tbody></table></div><div style="margin-top:15px;text-align:right"><div>Subtotal: '+money(sub,cur)+'</div><div>VAT: '+money(tax,cur)+'</div><div class="big">Total: '+money(total,cur)+'</div></div>';
+}
+function printInvoice(){
+ generateInvoice();
+ const w=window.open('','_blank');
+ if(!w){toast('Allow pop-ups to print the invoice');return}
+ w.document.write('<html><head><title>Invoice</title><style>body{font-family:Arial;padding:30px;color:#111}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{padding:9px;border-bottom:1px solid #ddd;text-align:left}.big{font-size:28px;font-weight:700;text-align:right;margin-top:15px}</style></head><body>'+$('invoicePreview').innerHTML+'</body></html>');
+ w.document.close();w.focus();w.print();
+}
+function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function escapeAttr(s){return escapeHtml(s).replace(/'/g,'&#39;')}
+
+/* settings */
+function saveSettings(){
+ localStorage.setItem('workHubSettings',JSON.stringify({currency:$('setCurrency').value||'£',vat:+$('setVat').value||0}));
+ toast('Settings saved');
+}
+function resetSettings(){localStorage.removeItem('workHubSettings');$('setCurrency').value='£';$('setVat').value=20;toast('Settings reset')}
+function loadSettings(){
+ try{const s=JSON.parse(localStorage.getItem('workHubSettings')||'null');if(s){$('setCurrency').value=s.currency||'£';$('setVat').value=s.vat??20;$('invCur').value=s.currency||'£';$('invVat').value=s.vat??20;$('taxCurrency').value=s.currency||'£';$('taxRate').value=s.vat??20;$('vatRate').value=s.vat??20}}catch{}
+}
+$('invDate').value=new Date().toISOString().slice(0,10);
+loadSettings();renderInvoiceRows();refreshConversions();
+genPercent();genDiscount();genMarkup();genTip();genTax();genVatSplit();genLoan();genPay();genBreakEven();genDate();genTime();genConvert();genText();
+</script>
+</body>
+</html>
